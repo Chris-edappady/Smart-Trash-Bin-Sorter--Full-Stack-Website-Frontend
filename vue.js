@@ -15,6 +15,7 @@ new Vue({
     dailyDays: 7,
     pollInterval: 3000,
     pollTimer: null,
+    compositionChart: null,
   },
 
   computed: {
@@ -85,6 +86,7 @@ new Vue({
           metal: Number(counts.metal || 0),
           general: Number(counts.general || 0)
         };
+        this.updateCompositionChart();
       } catch (error) {
         console.error('loadCounts error:', error);
       }
@@ -209,6 +211,44 @@ new Vue({
       } catch (e) {
         console.error('loadDailyTotals error', e);
       }
+    },
+    updateCompositionChart() {
+      const values = [
+        this.itemCounts.paper,
+        this.itemCounts.plastic,
+        this.itemCounts.metal,
+        this.itemCounts.general
+      ];
+
+      const labels = this.categoryOrder.map(c => c.name);
+      const colors = this.categoryOrder.map(c => c.color);
+
+      this.$nextTick(() => {
+        const canvas = document.getElementById('compositionChart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        if (this.compositionChart) {
+          this.compositionChart.data.datasets[0].data = values;
+          this.compositionChart.update();
+        } else {
+          this.compositionChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels,
+              datasets: [{
+                data: values,
+                backgroundColor: colors
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false
+            }
+          });
+        }
+      });
     }
   }
 });
