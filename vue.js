@@ -30,6 +30,7 @@ new Vue({
    created() {
     this.loadLatest();
     this.loadCounts();
+    this.loadHistory(); 
     this.startPolling();
   },
 
@@ -41,6 +42,7 @@ new Vue({
       this.pollTimer = setInterval(() => {
         this.loadLatest();
         this.loadCounts();
+        this.loadHistory(); 
       }, this.pollInterval);
     },
 
