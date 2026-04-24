@@ -10,7 +10,9 @@ new Vue({
       { key: 'metal', name: 'Metal', color: '#6b7280', iconClass: 'fa-solid fa-wrench' },
       { key: 'general', name: 'General Waste', color: '#10b981', iconClass: 'fa-solid fa-trash-can' }
     ],
-    historyChart: null
+    historyChart: null,
+    pollInterval: 3000,
+    pollTimer: null
   },
 
   computed: {
@@ -28,9 +30,27 @@ new Vue({
    created() {
     this.loadLatest();
     this.loadCounts();
+    this.startPolling();
   },
 
   methods: {
+    //starting polling
+    startPolling() {
+      if (this.pollTimer) clearInterval(this.pollTimer);
+
+      this.pollTimer = setInterval(() => {
+        this.loadLatest();
+        this.loadCounts();
+      }, this.pollInterval);
+    },
+
+    stopPolling() {
+      if (this.pollTimer) {
+        clearInterval(this.pollTimer);
+        this.pollTimer = null;
+      }
+    },
+    //Loading latest bin data
     async loadLatest() {
       try {
         const snap = await getLatestReadings();
