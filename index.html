@@ -36,7 +36,9 @@
         :style="{
             background: 'conic-gradient(#4CAF50 ' + cat.level + '%, #e5e7eb ' + cat.level + '%)'
           }">
-          <div class="pct-text">{{ cat.level }}%</div>
+          <div class="ring-inner">
+            <div class="pct-text">{{ cat.level }}%</div>
+          </div>
         </div>
         <div class="items-count">{{ cat.count }} items</div>
       </div>
