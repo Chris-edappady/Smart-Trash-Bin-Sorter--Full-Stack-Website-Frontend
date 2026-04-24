@@ -36,7 +36,7 @@ async function getDailyTotals(days = 7) {
   }
 }
 
-// Fetch most recent events for the activity table
+// Fetch most recent updates for the table
 async function getRecentEvents(limit = 20) {
   try {
     const response = await fetch(`${BASE_URL}/readings/recent?limit=${encodeURIComponent(limit)}`);
