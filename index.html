@@ -32,7 +32,10 @@
 
       <div class="cat-card" v-for="cat in categories" :key="cat.name">
         <div class="cat-name">{{ cat.name }}</div>
-        <div class="progress-ring">
+        <div class="progress-ring"
+        :style="{
+            background: 'conic-gradient(#4CAF50 ' + cat.level + '%, #e5e7eb ' + cat.level + '%)'
+          }">
           <div class="pct-text">{{ cat.level }}%</div>
         </div>
         <div class="items-count">{{ cat.count }} items</div>
