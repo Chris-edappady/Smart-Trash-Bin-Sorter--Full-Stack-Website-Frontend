@@ -7,11 +7,14 @@
 
   <!-- link for css stylesheet -->
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
 </head>
 
 <body>
-
-  <!-- HEADER -->
+<div id="app">
+  <!-- Header -->
   <header class="site-header">
     <div class="header-left"></div>
 
@@ -27,40 +30,16 @@
     <!-- Category Cards-->
     <section class="top-cards">
 
-      <div class="cat-card">
-        <div class="cat-name">Paper</div>
+      <div class="cat-card" v-for="cat in categories" :key="cat.name">
+        <div class="cat-name">{{ cat.name }}</div>
         <div class="progress-ring">
-          <div class="pct-text">0%</div>
+          <div class="pct-text">{{ cat.level }}%</div>
         </div>
-        <div class="items-count">0 items</div>
+        <div class="items-count">{{ cat.count }} items</div>
       </div>
-
-      <div class="cat-card">
-        <div class="cat-name">Plastic</div>
-        <div class="progress-ring">
-          <div class="pct-text">0%</div>
-        </div>
-        <div class="items-count">0 items</div>
-      </div>
-
-      <div class="cat-card">
-        <div class="cat-name">Metal</div>
-        <div class="progress-ring">
-          <div class="pct-text">0%</div>
-        </div>
-        <div class="items-count">0 items</div>
-      </div>
-
-      <div class="cat-card">
-        <div class="cat-name">General</div>
-        <div class="progress-ring">
-          <div class="pct-text">0%</div>
-        </div>
-        <div class="items-count">0 items</div>
-      </div>
-
     </section>
   </main>
+</div>
   <script src="vue.js"></script>
 </body>
 </html>
