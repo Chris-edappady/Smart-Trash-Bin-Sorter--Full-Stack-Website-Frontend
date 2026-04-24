@@ -11,8 +11,10 @@ new Vue({
       { key: 'general', name: 'General Waste', color: '#10b981', iconClass: 'fa-solid fa-trash-can' }
     ],
     historyChart: null,
+    dailyTotalsChart: null,
+    dailyDays: 7,
     pollInterval: 3000,
-    pollTimer: null
+    pollTimer: null,
   },
 
   computed: {
@@ -31,6 +33,7 @@ new Vue({
     this.loadLatest();
     this.loadCounts();
     this.loadHistory(); 
+    this.loadDailyTotals(); 
     this.startPolling();
   },
 
@@ -43,6 +46,7 @@ new Vue({
         this.loadLatest();
         this.loadCounts();
         this.loadHistory(); 
+        this.loadDailyTotals();
       }, this.pollInterval);
     },
 
@@ -154,6 +158,56 @@ new Vue({
 
       } catch (error) {
         console.error('loadHistory error:', error);
+      }
+    },
+    async loadDailyTotals() {
+      try {
+        const rows = await getDailyTotals(this.dailyDays);
+        if (!rows || !rows.length) return;
+
+        const labels = rows.map(r => {
+          const [yyyy, mm, dd] = r.day.split('-');
+          return `${dd}/${mm}`;
+        });
+
+        const categories = ['paper','plastic','metal','general'];
+
+        const datasets = categories.map(cat => {
+          const meta = this.categoryOrder.find(c => c.key === cat);
+          return {
+            label: meta.name,
+            data: rows.map(r => r.levels?.[cat] || 0),
+            backgroundColor: meta.color,
+            stack: 'stack1'
+          };
+        });
+
+        this.$nextTick(() => {
+          const canvas = document.getElementById('dailyTotalsChart');
+          if (!canvas) return;
+
+          const ctx = canvas.getContext('2d');
+
+          if (this.dailyTotalsChart) {
+            this.dailyTotalsChart.destroy();
+          }
+
+          this.dailyTotalsChart = new Chart(ctx, {
+            type: 'bar',
+            data: { labels, datasets },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: { stacked: true },
+                y: { stacked: true, beginAtZero: true }
+              }
+            }
+          });
+        });
+
+      } catch (e) {
+        console.error('loadDailyTotals error', e);
       }
     }
   }

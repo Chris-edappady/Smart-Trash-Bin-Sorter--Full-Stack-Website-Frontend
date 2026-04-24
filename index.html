@@ -13,6 +13,9 @@
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -33,19 +36,31 @@
     <!-- Category Cards-->
     <section class="top-cards">
 
-      <div class="cat-card" v-for="cat in categories" :key="cat.name">
+      <div class="cat-card" v-for="cat in categoryOrder" :key="cat.key">
         <div class="cat-name">{{ cat.name }}</div>
         <div class="progress-ring"
         :style="{
-            background: 'conic-gradient(#4CAF50 ' + cat.level + '%, #e5e7eb ' + cat.level + '%)'
-          }">
+          background: 'conic-gradient(' + cat.color + ' ' + (topLevels[cat.key] || 0) + '%, #e5e7eb ' + (topLevels[cat.key] || 0) + '%)'
+        }">
           <div class="ring-inner">
-            <div class="pct-text">{{ cat.level }}%</div>
+            <div class="pct-text">{{ Math.round(topLevels[cat.key] || 0) }}%</div>
           </div>
         </div>
-        <div class="items-count">{{ cat.count }} items</div>
+        <div class="items-count">{{ itemCounts[cat.key] || 0 }} items</div>
       </div>
     </section>
+    <!-- Fill levels chart -->
+    <div style="margin-top:20px; background:#fff; padding:16px; border-radius:10px;">
+      <h3>Fill Levels</h3>
+      <canvas id="historyChart" style="width:100%; height:320px;"></canvas>
+    </div>
+
+    <!-- Stacked Bar Chart for 7 days -->
+    <div style="margin-top:20px; background:#fff; padding:16px; border-radius:10px;">
+      <h3>Daily Totals</h3>
+      <canvas id="dailyTotalsChart" style="width:100%; height:300px;"></canvas>
+    </div>
+
   </main>
 </div>
 <script src="getReadings.js"></script>

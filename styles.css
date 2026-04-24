@@ -52,7 +52,6 @@ body {
   padding: 16px;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  border-top: 4px solid var(--color);
 }
 
 .cat-name {
